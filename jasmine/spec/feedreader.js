@@ -94,8 +94,11 @@ $(function() {
          });
 
          it('completes work', function() {
-           const feed = document.querySelector('.feed');
-           expect(feed.children.length > 0).toBe(true);
+           // const feed = document.querySelector('.feed');
+           const entries = document.querySelector('.feed').querySelectorAll('.entry');
+           // expect(feed.children.length > 0).toBe(true);
+           expect(entries.length > 0).toBe(true);
+           // expect(feed.entry.classList.contains('entry')).toBe(true);
          });
     });
 
@@ -103,23 +106,35 @@ $(function() {
     describe('New Feed Selection', function() {
       const feed = document.querySelector('.feed');
       const firstFeed = [];
+      const secondFeed = [];
 
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
          beforeEach(function(done) {
-           loadFeed(0);
-           Array.from(feed.children).forEach(function(entry) {
-             firstFeed.push(entry.innerText);
+           loadFeed(0, function() {
+             Array.from(feed.children).forEach(function(entry) {
+               firstFeed.push(entry.innerText);
+             });
            });
-           loadFeed(1, done);
+
+           loadFeed(1, function() {
+             Array.from(feed.children).forEach(function(entry) {
+               secondFeed.push(entry.innerText);
+             });
+             done();
+           });
+
          });
 
          it('content changes', function() {
            Array.from(feed.children).forEach(function(entry,index) {
-             console.log(entry.innerText, firstFeed[index], entry.innerText === firstFeed[index]);
-             expect(entry.innerText === firstFeed[index]).toBe(false);
+             // expect(entry.innerText, firstFeed[index], entry.innerText === firstFeed[index]);
+             // expect(entry.innerText === firstFeed[index]).toBe(false);
+             expect(firstFeed !== secondFeed).toBe(true);
+             // console.log(firstFeed);
+             // console.log(secondFeed);
            });
          });
     });
